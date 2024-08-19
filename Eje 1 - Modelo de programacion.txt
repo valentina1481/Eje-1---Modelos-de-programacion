@@ -1,0 +1,167 @@
+Parte 1 Lista tipo pila y cola 
+
+import java.util.LinkedList;
+import java.util.Scanner;
+
+public class PilaCola {
+    private LinkedList<Integer> lista;
+
+    public PilaCola() {
+        lista = new LinkedList<>();
+    }
+
+    public void insertar(int elemento) {
+        lista.addFirst(elemento); // Agregar al inicio para simular una pila
+    }
+
+    public void mostrar() {
+        System.out.println("Los datos de la lista son:");
+        for (int num : lista) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+    }
+
+    public int cantidadPares() {
+        int count = 0;
+        for (int num : lista) {
+            if (num % 2 == 0) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public double promedio() {
+        if (lista.isEmpty()) return 0;
+        double sum = 0;
+        for (int num : lista) {
+            sum += num;
+        }
+        return sum / lista.size();
+    }
+
+    public int ultimoDato() {
+        return lista.isEmpty() ? -1 : lista.getFirst();
+    }
+
+    public static void main(String[] args) {
+        PilaCola pilaCola = new PilaCola();
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("¿Cuántos elementos deseas insertar en la lista? ");
+        int n = scanner.nextInt();
+
+        for (int i = 0; i < n; i++) {
+            System.out.print("Ingresa un número: ");
+            int elemento = scanner.nextInt();
+            pilaCola.insertar(elemento);
+        }
+
+        pilaCola.mostrar();
+        System.out.println("La cantidad de números pares: " + pilaCola.cantidadPares());
+        System.out.printf("El promedio es: %.2f%n", pilaCola.promedio());
+        System.out.println("El último dato de la lista es: " + pilaCola.ultimoDato());
+
+        scanner.close();
+    }
+}
+
+
+Parte 2 Lista enlazada simple personas 
+
+class NodoPersona {
+    String codigo;
+    String nombre;
+    String telefono;
+    int edad;
+    NodoPersona siguiente;
+
+    public NodoPersona(String codigo, String nombre, String telefono, int edad) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.telefono = telefono;
+        this.edad = edad;
+        this.siguiente = null;
+    }
+}
+
+class ColaPersona {
+    private NodoPersona frente;
+    private NodoPersona finalNodo;
+    private int tamano;
+
+    public ColaPersona() {
+        this.frente = null;
+        this.finalNodo = null;
+        this.tamano = 0;
+    }
+
+    public void insertar(String codigo, String nombre, String telefono, int edad) {
+        NodoPersona nuevoNodo = new NodoPersona(codigo, nombre, telefono, edad);
+        if (finalNodo != null) {
+            finalNodo.siguiente = nuevoNodo;
+        }
+        finalNodo = nuevoNodo;
+        if (frente == null) {
+            frente = nuevoNodo;
+        }
+        tamano++;
+    }
+
+    public void mostrar() {
+        NodoPersona actual = frente;
+        System.out.println("Los elementos de la lista son:");
+        while (actual != null) {
+            System.out.print("(" + actual.codigo + ", " + actual.nombre + ", " + actual.telefono + ", " + actual.edad + "), ");
+            actual = actual.siguiente;
+        }
+        System.out.println();
+    }
+
+    public void eliminar() {
+        if (frente != null) {
+            frente = frente.siguiente;
+            tamano--;
+            if (frente == null) {
+                finalNodo = null;
+            }
+        }
+    }
+
+    public int contar() {
+        return tamano;
+    }
+}
+
+public class MainColaPersona {
+    public static void main(String[] args) {
+        ColaPersona cola = new ColaPersona();
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("¿Cuántos elementos deseas insertar en la lista de personas? ");
+        int n = scanner.nextInt();
+        scanner.nextLine(); // Consumir el salto de línea
+
+        for (int i = 0; i < n; i++) {
+            System.out.print("Ingresa el código: ");
+            String codigo = scanner.nextLine();
+            System.out.print("Ingresa el nombre: ");
+            String nombre = scanner.nextLine();
+            System.out.print("Ingresa el teléfono: ");
+            String telefono = scanner.nextLine();
+            System.out.print("Ingresa la edad: ");
+            int edad = scanner.nextInt();
+            scanner.nextLine(); // Consumir el salto de línea
+            cola.insertar(codigo, nombre, telefono, edad);
+        }
+
+        cola.mostrar();
+        cola.eliminar();
+        System.out.println("Después de eliminar el primer elemento:");
+        cola.mostrar();
+        System.out.println("Contar los elementos que quedan en la lista: " + cola.contar());
+
+        scanner.close();
+    }
+}
